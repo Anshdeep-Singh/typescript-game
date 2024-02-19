@@ -50,6 +50,12 @@ let player = new Player({
     width: 1716,
 
     animations: {
+      jump: {
+        frameRate: 11,
+        frameBuffer:2,
+        loop: true,
+        imageSrc: './img/king/Jump.png',
+      },
         idleRight: {
             frameRate: 11,
             frameBuffer:2,
@@ -252,7 +258,9 @@ let levels: { [key: number]: { init: () => void } } = {
                 return
               }
             }
-            if (player.velocity.y === 0) player.velocity.y = -25
+            if (player.velocity.y === 0) {
+              player.velocity.y = -15
+            }
       
             break
           case 'a':

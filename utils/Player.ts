@@ -70,7 +70,7 @@ export class Player extends Sprite {
           this.switchSprite('runLeft');
           this.velocity.x = -5;
           this.lastDirection = 'left';
-        } else {
+        }else {
           if (this.lastDirection === 'left') this.switchSprite('idleLeft');
           else this.switchSprite('idleRight');
         }
