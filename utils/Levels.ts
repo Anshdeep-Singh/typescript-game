@@ -1,5 +1,5 @@
 "use client"
-import { collisionsLevel1, collisionsLevel2, collisionsLevel3 } from "./Collisions"
+import { collisionsLevel1, collisionsLevel2, collisionsLevel3, collisionsLevel4, collisionsLevel5 } from "./Collisions"
 import { parse2D, createObjectsFrom2D } from "@/helper/ArrayTransformer";
 import { Player } from "@/utils/Player";
 import gsap from "gsap";
@@ -48,7 +48,6 @@ let player = new Player({
     frameRate: 11,
     height: 116,
     width: 1716,
-
     animations: {
       jump: {
         frameRate: 11,
@@ -92,7 +91,7 @@ let player = new Player({
             onComplete: () => {
               level++
   
-              if (level === 4) level = 1
+              if (level === 6) level = 1
               levels[level].init()
               player.switchSprite('idleRight')
               player.preventInput = false
@@ -112,6 +111,8 @@ let levels: { [key: number]: { init: () => void } } = {
         parsedCollisions = parse2D(collisionsLevel1);
         collisionBlocks = createObjectsFrom2D(parsedCollisions);
         player.collisionBlocks = collisionBlocks;
+        player.position.x = 170;
+        player.position.y = 240;
         if (player.currentAnimation) player.currentAnimation.isActive = false;
   
         background = new Sprite({
@@ -219,6 +220,82 @@ let levels: { [key: number]: { init: () => void } } = {
         ];
       },
     },
+    4: {
+      init: () => {
+        parsedCollisions = parse2D(collisionsLevel4);
+        collisionBlocks = createObjectsFrom2D(parsedCollisions);
+        player.collisionBlocks = collisionBlocks;
+        player.position.x = 750;
+        player.position.y = 230;
+        if (player.currentAnimation) player.currentAnimation.isActive = false;
+  
+        background = new Sprite({
+          position: {
+            x: 0,
+            y: 0,
+          },
+          imageSrc: './img/backgroundLevel4.png',
+          width: 1024,
+          height: 576,
+          frameRate:1,
+
+                });
+  
+        doors = [
+          new Sprite({
+            position: {
+              x: 176.0,
+              y: 335,
+            },
+            imageSrc: './img/doorOpen.png',
+            frameRate: 5,
+            frameBuffer: 5,
+            loop: false,
+            autoplay: false,
+            width: 460,
+            height: 112,
+                    }),
+        ];
+      },
+    },
+    5: {
+      init: () => {
+        parsedCollisions = parse2D(collisionsLevel5);
+        collisionBlocks = createObjectsFrom2D(parsedCollisions);
+        player.collisionBlocks = collisionBlocks;
+        player.position.x = 30;
+        player.position.y = 30;
+        if (player.currentAnimation) player.currentAnimation.isActive = false;
+  
+        background = new Sprite({
+          position: {
+            x: 0,
+            y: 0,
+          },
+          imageSrc: './img/backgroundLevel5.png',
+          width: 1024,
+          height: 576,
+          frameRate:1,
+
+                });
+  
+        doors = [
+          new Sprite({
+            position: {
+              x: 830.0,
+              y: 145,
+            },
+            imageSrc: './img/doorOpen.png',
+            frameRate: 5,
+            frameBuffer: 5,
+            loop: false,
+            autoplay: false,
+            width: 460,
+            height: 112,
+                    }),
+        ];
+      },
+    },
   };
 
   const keys = {
@@ -231,6 +308,12 @@ let levels: { [key: number]: { init: () => void } } = {
     d: {
       pressed: false,
     },
+    touchLeft: {
+      pressed: false,
+  },
+  touchRight: {
+      pressed: false,
+  },
   }
   
 
@@ -240,6 +323,7 @@ let levels: { [key: number]: { init: () => void } } = {
         if (player.preventInput) return
         switch (event.key) {
           case 'w':
+          case 'ArrowUp':
             for (let i = 0; i < doors.length; i++) {
               const door = doors[i]
       
@@ -259,15 +343,22 @@ let levels: { [key: number]: { init: () => void } } = {
               }
             }
             if (player.velocity.y === 0) {
-              player.velocity.y = -15
+              player.velocity.y = -16
             }
       
             break
+            case 'ArrowDown':  
+            event.preventDefault();
+            break;
           case 'a':
+            case 'ArrowLeft': 
+
             // move player to the left
             keys.a.pressed = true
             break
           case 'd':
+            case 'ArrowRight': 
+
             // move player to the right
             keys.d.pressed = true
             break
@@ -277,11 +368,15 @@ let levels: { [key: number]: { init: () => void } } = {
       window.addEventListener('keyup', (event) => {
         switch (event.key) {
           case 'a':
+            case 'ArrowLeft': 
+
             // move player to the left
             keys.a.pressed = false
       
             break
           case 'd':
+            case 'ArrowRight': 
+
             // move player to the right
             keys.d.pressed = false
       
@@ -294,7 +389,10 @@ let levels: { [key: number]: { init: () => void } } = {
 
 export function animateGame(ctx: CanvasRenderingContext2D, canvasWidth: number, canvasHeight: number) {
     window.requestAnimationFrame(() => animateGame(ctx, canvasWidth, canvasHeight));
-  
+
+    
+    const canvas = ctx.canvas;
+
     background.draw(ctx);
 
     // collisionBlocks.forEach((collisionBlock) => {

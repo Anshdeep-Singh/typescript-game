@@ -24,7 +24,7 @@ const GameCanvas = () => {
     return (
         <>
         <div className='p-8 rounded-lg bg-gray-400'>
-            <h1 className='w-full text-center text-3xl p-2'>Endless Timepass Game</h1>
+            <h1 className='w-full text-center text-3xl p-2 '>Endless Timepass Game</h1>
             <canvas ref={canvasRef} id='gameCanvas'></canvas>
         </div>
         </>

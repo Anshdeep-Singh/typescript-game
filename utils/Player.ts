@@ -59,14 +59,14 @@ export class Player extends Sprite {
       this.checkForVerticalCollisions()
     }
   
-    handleInput(keys: { a: { pressed: boolean }; d: { pressed: boolean } ; w: { pressed: boolean }; }) {
+    handleInput(keys: { a: { pressed: boolean }; d: { pressed: boolean } ; w: { pressed: boolean }; touchRight: { pressed: boolean }; touchLeft: { pressed: boolean};}) {
         if (this.preventInput) return;
         this.velocity.x = 0;
-        if (keys.d.pressed) {
+        if (keys.d.pressed || keys.touchRight.pressed) {
           this.switchSprite('runRight');
           this.velocity.x = 5;
           this.lastDirection = 'right';
-        } else if (keys.a.pressed) {
+        } else if (keys.a.pressed || keys.touchLeft.pressed) {
           this.switchSprite('runLeft');
           this.velocity.x = -5;
           this.lastDirection = 'left';
